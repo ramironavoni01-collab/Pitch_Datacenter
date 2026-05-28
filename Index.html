@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datacenter vs AWS — Pitch de Ventas</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05080f;
+    --surface: #0c1120;
+    --surface2: #111827;
+    --border: #1e2d47;
+    --accent: #00c2ff;
+    --accent2: #ff4d4d;
+    --gold: #f5c542;
+    --text: #e2eaf5;
+    --muted: #6b7f9a;
+    --green: #00e59b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 60px 24px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,194,255,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0,229,155,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,194,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,194,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 10vw, 120px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.35s forwards;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-sub {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 5vw, 60px);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.5s forwards;
+  }
+
+  .hero-desc {
+    max-width: 600px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--muted);
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.65s forwards;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 1s forwards;
+  }
+
+  .scroll-hint span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: pulse 2s ease infinite;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-bottom: 48px;
+  }
+
+  /* ── PAIN POINTS ── */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .pain-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .pain-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+
+  .pain-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .pain-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .pain-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .pain-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── ROI CALCULATOR ── */
+  .roi-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 48px;
+  }
+
+  .roi-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .ctrl-group label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .ctrl-group input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 6px;
+  }
+
+  .ctrl-group input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(0,194,255,0.5);
+  }
+
+  .ctrl-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+
+  .compare-table th {
+    padding: 14px 20px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    background: var(--surface2);
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table th:nth-child(2) { color: var(--accent2); }
+  .compare-table th:nth-child(3) { color: var(--green); }
+
+  .compare-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .compare-table td:first-child {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .amount {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+
+  .aws-col { color: var(--accent2); }
+  .dc-col  { color: var(--green); }
+
+  /* ── CHART BARS ── */
+  .chart-section { margin-top: 40px; }
+
+  .chart-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .year-bars {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    height: 200px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .year-group {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    position: relative;
+  }
+
+  .bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .bar {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    min-height: 4px;
+  }
+
+  .bar.aws { background: linear-gradient(to top, #ff4d4d, #ff8080); }
+  .bar.dc  { background: linear-gradient(to top, #00e59b, #80ffcf); }
+
+  .bar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .year-label {
+    position: absolute;
+    bottom: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* ── RESULT CARDS ── */
+  .result-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .result-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .result-card.highlight {
+    border-color: var(--green);
+    background: rgba(0,229,155,0.05);
+  }
+
+  .result-card .rc-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .result-card .rc-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .result-card .rc-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── VALUE PROPS ── */
+  .vp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .vp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    transition: all 0.3s;
+  }
+
+  .vp-card:hover { border-color: var(--accent); }
+
+  .vp-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--border);
+    flex-shrink: 0;
+    transition: color 0.3s;
+  }
+
+  .vp-card:hover .vp-num { color: var(--accent); }
+
+  .vp-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .vp-card p  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center;
+    padding: 80px 24px 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,194,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    background: rgba(0,194,255,0.1);
+    border: 1px solid rgba(0,194,255,0.3);
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(40px, 7vw, 80px);
+    margin-bottom: 20px;
+  }
+
+  .cta-section p {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 500px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 16px 40px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 0.02em;
+  }
+
+  .cta-btn:hover {
+    background: #33cfff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0,194,255,0.3);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1; }
+  }
+
+  /* ── TOOLTIP POPUP ── */
+  #popup {
+    position: fixed;
+    top: 20px; right: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--green);
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 13px;
+    color: var(--green);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+    z-index: 999;
+  }
+
+  #popup.show { opacity: 1; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div id="popup">✓ Datos actualizados</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="grid-bg"></div>
+  <div class="eyebrow">Pitch de Ventas · Infraestructura Tecnológica</div>
+  <h1>DATACENTER<br><span>PROPIO</span></h1>
+  <div class="hero-sub">vs. Cloud Pública</div>
+  <p class="hero-desc">Una decisión estratégica que puede representar millones en ahorro. Te mostramos los números reales y por qué la infraestructura propia gana a largo plazo.</p>
+  <div class="scroll-hint">
+    <span>Explorar</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- PAIN POINTS -->
+<section>
+  <div class="section-tag">// El problema</div>
+  <h2>¿POR QUÉ <span style="color:var(--accent2)">AWS</span><br>DUELE A ESCALA?</h2>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <div class="pain-icon">📈</div>
+      <h3>Costos impredecibles</h3>
+      <p>El modelo pay-per-use escala linealmente con tu negocio. A mayor volumen, mayor factura mensual sin techo.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🔒</div>
+      <h3>Dependencia total</h3>
+      <p>Vendor lock-in. Si AWS sube precios o tiene una caída, tu operación sufre sin posibilidad de respuesta inmediata.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">🌍</div>
+      <h3>Datos fuera de control</h3>
+      <p>Tus datos sensibles residen en servidores de terceros en otros países, complicando el cumplimiento regulatorio.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-icon">⚡</div>
+      <h3>Latencia variable</h3>
+      <p>Para sistemas críticos en tiempo real (ERP, manufactura, finanzas) la latencia a la nube puede ser un cuello de botella.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROI CALCULATOR -->
+<section>
+  <div class="section-tag">// Comparativa financiera</div>
+  <h2>CALCULÁ TU<br><span style="color:var(--green)">ROI REAL</span></h2>
+
+  <div class="roi-wrap">
+    <div class="roi-controls">
+      <div class="ctrl-group">
+        <label>Servidores necesarios</label>
+        <input type="range" id="servers" min="5" max="100" value="20" step="5">
+        <div class="ctrl-val"><span id="servers-val">20</span> servidores</div>
+      </div>
+      <div class="ctrl-group">
+        <label>Almacenamiento (TB)</label>
+        <input type="range" id="storage" min="10" max="500" value="50" step="10">
+        <div class="ctrl-val"><span id="storage-val">50</span> TB</div>
+      </div>
+      <div class="ctrl-group">
+        <label>Transferencia mensual (TB)</label>
+        <input type="range" id="transfer" min="1" max="100" value="10" step="1">
+        <div class="ctrl-val"><span id="transfer-val">10</span> TB/mes</div>
+      </div>
+      <div class="ctrl-group">
+        <label>Horizonte de análisis</label>
+        <input type="range" id="years" min="3" max="10" value="5" step="1">
+        <div class="ctrl-val"><span id="years-val">5</span> años</div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <table class="compare-table" id="compare-table">
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th>☁ AWS (mensual acumulado)</th>
+          <th>🏢 Datacenter Propio</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+
+    <!-- CHART -->
+    <div class="chart-section">
+      <div class="chart-title">// Costo acumulado por año (USD)</div>
+      <div class="year-bars" id="year-bars"></div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--accent2)"></div>
+          <span>AWS acumulado</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--green)"></div>
+          <span>Datacenter Propio</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT CARDS -->
+    <div class="result-cards" id="result-cards"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VALUE PROPS -->
+<section>
+  <div class="section-tag">// Propuesta de valor</div>
+  <h2>POR QUÉ<br><span style="color:var(--accent)">ELEGIRNOS</span></h2>
+  <div class="vp-grid">
+    <div class="vp-card">
+      <div class="vp-num">01</div>
+      <div>
+        <h3>Implementación llave en mano</h3>
+        <p>Nos encargamos de todo: diseño, hardware, instalación, configuración y capacitación. Tu equipo opera desde el día uno.</p>
+      </div>
+    </div>
+    <div class="vp-card">
+      <div class="vp-num">02</div>
+      <div>
+        <h3>Soporte 24/7 local</h3>
+        <p>Técnicos en el país, tiempos de respuesta garantizados por SLA. Sin tickets internacionales ni timeouts de soporte.</p>
+      </div>
+    </div>
+    <div class="vp-card">
+      <div class="vp-num">03</div>
+      <div>
+        <h3>Financiamiento en cuotas</h3>
+        <p>La inversión inicial se financia. El costo mensual del crédito compite directamente con tu factura de AWS actual.</p>
+      </div>
+    </div>
+    <div class="vp-card">
+      <div class="vp-num">04</div>
+      <div>
+        <h3>Compliance y seguridad</h3>
+        <p>Tus datos quedan dentro de tu infraestructura. Facilitamos certificaciones ISO 27001 y cumplimiento con Ley 25.326.</p>
+      </div>
+    </div>
+    <div class="vp-card">
+      <div class="vp-num">05</div>
+      <div>
+        <h3>Escalabilidad modular</h3>
+        <p>Empezás con lo que necesitás hoy. Agregar capacidad es predecible y planificado, no una sorpresa en la factura.</p>
+      </div>
+    </div>
+    <div class="vp-card">
+      <div class="vp-num">06</div>
+      <div>
+        <h3>ROI garantizado en 3 años</h3>
+        <p>Con tu perfil de uso actual, proyectamos el punto de break-even. Si no se cumple, te devolvemos la diferencia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-badge">Siguiente paso</div>
+  <h2 style="margin-bottom:20px">HABLEMOS<br><span style="color:var(--accent)">HOY</span></h2>
+  <p>Agendá una demo técnica gratuita. Analizamos tu infraestructura actual y te presentamos un estudio de ROI personalizado en 48 hs.</p>
+  <button class="cta-btn" onclick="alert('¡Agendá tu demo técnica gratuita!')">
+    Solicitar análisis gratuito →
+  </button>
+</div>
+
+<script>
+  // ── DATA MODEL ──
+  const COST = {
+    // AWS pricing (USD, approximate)
+    awsPerServer: 350,      // EC2 t3.xlarge ~$0.166/hr = ~$120/mo; c5.2xlarge ~$280; promedio enterprise ~$350
+    awsStoragePerTB: 23,    // S3 standard
+    awsTransferPerTB: 90,   // egress ~$0.09/GB = $90/TB
+    awsSupport: 0.10,       // Business support ~10% of bill
+    awsAnnualIncrease: 0.05,// 5% price drift
+
+    // DC pricing (USD)
+    dcServerUnit: 8500,     // servidor enterprise mid-range
+    dcStoragePerTB: 120,    // NAS/SAN one-time
+    dcNetworkFixed: 3000,   // switches/firewall one-time
+    dcRackCooling: 5000,    // per rack (5 servers/rack)
+    dcInstall: 15000,       // installation & config fixed
+    dcOpsMonthly: 800,      // admin/monitoring per 10 servers
+    dcPower: 180,           // electricity per server/year
+    dcMaintenance: 0.12,    // 12% of hardware/year
+  };
+
+  function calc(servers, storageTB, transferTB, years) {
+    // ── AWS ──
+    const awsMonthly = (servers * COST.awsPerServer)
+                     + (storageTB * COST.awsStoragePerTB)
+                     + (transferTB * COST.awsTransferPerTB);
+    const awsMonthlyWithSupport = awsMonthly * (1 + COST.awsSupport);
+    const awsYearly = [];
+    let awsAcc = 0;
+    for (let y = 1; y <= years; y++) {
+      const factor = Math.pow(1 + COST.awsAnnualIncrease, y - 1);
+      awsAcc += awsMonthlyWithSupport * 12 * factor;
+      awsYearly.push(Math.round(awsAcc));
+    }
+
+    // ── DC ──
+    const racks = Math.ceil(servers / 5);
+    const dcHardware = (servers * COST.dcServerUnit)
+                     + (storageTB * COST.dcStoragePerTB)
+                     + COST.dcNetworkFixed
+                     + (racks * COST.dcRackCooling)
+                     + COST.dcInstall;
+    const dcOps = (servers / 10) * COST.dcOpsMonthly * 12;
+    const dcPowerAnnual = servers * COST.dcPower;
+    const dcMaintAnnual = dcHardware * COST.dcMaintenance;
+    const dcOpex = dcOps + dcPowerAnnual + dcMaintAnnual;
+    const dcYearly = [];
+    let dcAcc = 0;
+    for (let y = 1; y <= years; y++) {
+      if (y === 1) dcAcc = dcHardware + dcOpex;
+      else dcAcc += dcOpex;
+      dcYearly.push(Math.round(dcAcc));
+    }
+
+    return {
+      awsMonthly: Math.round(awsMonthlyWithSupport),
+      dcHardware: Math.round(dcHardware),
+      dcOpexAnnual: Math.round(dcOpex),
+      awsYearly, dcYearly,
+      savings: awsYearly[years-1] - dcYearly[years-1],
+      breakeven: findBreakeven(awsYearly, dcYearly),
+      awsFinalYear: awsYearly[years-1],
+      dcFinalYear: dcYearly[years-1],
+    };
+  }
+
+  function findBreakeven(aws, dc) {
+    for (let i = 0; i < aws.length; i++) {
+      if (aws[i] > dc[i]) return i + 1;
+    }
+    return null;
+  }
+
+  function fmt(n) {
+    if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+    if (n >= 1000)    return '$' + (n/1000).toFixed(0) + 'K';
+    return '$' + n.toLocaleString();
+  }
+
+  function render() {
+    const servers  = parseInt(document.getElementById('servers').value);
+    const storage  = parseInt(document.getElementById('storage').value);
+    const transfer = parseInt(document.getElementById('transfer').value);
+    const years    = parseInt(document.getElementById('years').value);
+
+    document.getElementById('servers-val').textContent  = servers;
+    document.getElementById('storage-val').textContent  = storage;
+    document.getElementById('transfer-val').textContent = transfer;
+    document.getElementById('years-val').textContent    = years;
+
+    const d = calc(servers, storage, transfer, years);
+
+    // TABLE
+    const rows = [
+      ['Factura mensual (Año 1)', `<span class="amount aws-col">${fmt(d.awsMonthly)}/mes</span>`, `<span class="amount dc-col">${fmt(Math.round(d.dcOpexAnnual/12))}/mes (opex)</span>`],
+      ['Inversión inicial (CAPEX)', '<span class="amount aws-col">$0</span>', `<span class="amount dc-col">${fmt(d.dcHardware)}</span>`],
+      ['Costo operativo anual', `<span class="amount aws-col">${fmt(d.awsMonthly * 12)}</span>`, `<span class="amount dc-col">${fmt(d.dcOpexAnnual)}</span>`],
+      [`Costo total a ${years} años`, `<span class="amount aws-col" style="font-size:18px">${fmt(d.awsFinalYear)}</span>`, `<span class="amount dc-col" style="font-size:18px">${fmt(d.dcFinalYear)}</span>`],
+      ['Break-even', '<span style="color:var(--muted)">—</span>', d.breakeven ? `<span class="amount dc-col">Año ${d.breakeven}</span>` : `<span style="color:var(--muted)">Dentro del período</span>`],
+    ];
+
+    document.getElementById('table-body').innerHTML = rows.map(r =>
+      `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`
+    ).join('');
+
+    // CHART
+    const maxVal = Math.max(...d.awsYearly, ...d.dcYearly);
+    const barsHtml = d.awsYearly.map((aw, i) => {
+      const dc = d.dcYearly[i];
+      const awH = Math.max(4, Math.round((aw / maxVal) * 160));
+      const dcH = Math.max(4, Math.round((dc / maxVal) * 160));
+      return `
+        <div class="year-group">
+          <div class="bar-wrap">
+            <div class="bar aws" style="height:${awH}px" title="${fmt(aw)}"></div>
+            <div class="bar-label">AWS</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar dc" style="height:${dcH}px" title="${fmt(dc)}"></div>
+            <div class="bar-label">DC</div>
+          </div>
+          <div class="year-label">Año ${i+1}</div>
+        </div>`;
+    }).join('');
+    document.getElementById('year-bars').innerHTML = barsHtml;
+
+    // RESULT CARDS
+    const savingsPct = Math.round((d.savings / d.awsFinalYear) * 100);
+    const color = d.savings > 0 ? 'var(--green)' : 'var(--accent2)';
+    document.getElementById('result-cards').innerHTML = `
+      <div class="result-card">
+        <div class="rc-label">Costo total AWS</div>
+        <div class="rc-val" style="color:var(--accent2)">${fmt(d.awsFinalYear)}</div>
+        <div class="rc-sub">en ${years} años</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-label">Costo total Datacenter</div>
+        <div class="rc-val" style="color:var(--green)">${fmt(d.dcFinalYear)}</div>
+        <div class="rc-sub">capex + opex en ${years} años</div>
+      </div>
+      <div class="result-card ${d.savings > 0 ? 'highlight' : ''}">
+        <div class="rc-label">${d.savings > 0 ? '✓ Ahorro neto' : 'Diferencia'}</div>
+        <div class="rc-val" style="color:${color}">${fmt(Math.abs(d.savings))}</div>
+        <div class="rc-sub">${d.savings > 0 ? savingsPct + '% menos que AWS' : 'favor de AWS'}</div>
+      </div>
+      <div class="result-card">
+        <div class="rc-label">Break-even estimado</div>
+        <div class="rc-val" style="color:var(--accent)">${d.breakeven ? 'Año ' + d.breakeven : 'N/A'}</div>
+        <div class="rc-sub">recuperación de inversión</div>
+      </div>`;
+
+    showPopup();
+  }
+
+  function showPopup() {
+    const p = document.getElementById('popup');
+    p.classList.add('show');
+    setTimeout(() => p.classList.remove('show'), 1500);
+  }
+
+  // Events
+  ['servers','storage','transfer','years'].forEach(id => {
+    document.getElementById(id).addEventListener('input', render);
+  });
+
+  render();
+</script>
+</body>
+</html>
